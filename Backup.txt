@@ -1,0 +1,64 @@
+DLL
+using System.Runtime.CompilerServices;
+
+namespace InventoryLib
+{
+    public class Produto
+    {
+        public int Id { get; set; }
+        public string? Name { get; set; }
+        public double? Price { get; set; }
+
+    }
+    public class InventoryManager
+    {
+        public static List<Produto> produtos = new List<Produto>();
+        public static void AdicionarProduto(Produto produto)
+        {
+            if (produto != null)
+            {
+                produtos.Add(produto);
+            }
+        }
+        public static void RemoverProduto(Produto produto)
+        {
+            if (produto != null)
+            {
+                produtos.RemoveAll(p=> p.Id == produto.Id);
+            }
+        }
+        public List<Produto> Listar() => produtos;
+    }
+
+}
+
+Forms
+
+using InventoryLib;
+namespace WinForms
+{
+    
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+                
+           
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+
+        }
+    }
+}
