@@ -1,0 +1,156 @@
+Program
+
+namespace AtividadeJogo_Jean
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Guerreiro p1 = new Guerreiro("Souza", 5, 5);
+            Mago p2 = new Mago("Jaqueline", 5, 5);
+            Arqueiro p3 = new Arqueiro("Legolas", 5, 5);
+
+            List<Personagem> personagens = new List<Personagem> { p1, p2, p3};
+
+            
+
+            TotalizarDano totalizador = new TotalizarDano();
+            foreach (Personagem personagem in personagens)
+            {
+                totalizador.RegistrarAtaque(personagem);
+            }
+            Console.WriteLine($"\nO Valor total de dano dos personagens é {totalizador.DanoTotal}\n");
+
+            foreach (Personagem personagem in personagens)
+            {
+                Random danoAleatorio = new Random();
+                double limitadorDano = danoAleatorio.Next(1, 5);
+                personagem.Defender(limitadorDano);
+            }
+
+            
+        }
+    }
+}
+
+Personagem 
+namespace AtividadeJogo_Jean
+{
+    public abstract class Personagem
+    {
+        public string Nome { get; set; }
+        public int Nivel { get; set; }
+        public double Vida { get; set; }
+
+        public Personagem(string nome, int nivel, double vida)
+        {
+            Nome = nome;
+            Nivel = nivel;
+            Vida = vida;
+        }
+        public virtual double Atacar()
+        {
+            double dano = Nivel * 5;
+            Console.WriteLine($"{Nome} atacou e causou {dano} de dano");
+            return dano;
+        }
+        public virtual void Defender(double danoRecebido)
+        {
+            double danoFinal = danoRecebido * 0.5;
+            Vida += danoFinal;
+            Console.WriteLine($"{Nome}, bloqueou o dano! {Vida}");
+        }
+
+    }
+}
+
+Guerreiro
+namespace AtividadeJogo_Jean
+{
+    internal class Guerreiro : Personagem
+    {
+        public Guerreiro(string nome, int nivel, double vida) : base(nome, nivel, vida)
+        {
+        }
+        public override double Atacar()
+        {
+            double dano = ((Nivel * 5) * 2);
+            Console.WriteLine($"{Nome} atacou e causou {dano} de dano");
+            return dano;
+        }
+        public override void Defender(double danoRecebido)
+        {
+            double danoFinal = (danoRecebido / 4) * Nivel;
+            Vida += danoFinal;
+            Console.WriteLine($"{Nome}, bloqueou o dano com o escudo, sendo envolvido em uma aura protetora! Sua vida é {Vida:F2}");
+        }
+
+    }
+}
+
+Mago 
+
+namespace AtividadeJogo_Jean
+{
+    internal class Mago : Personagem
+    {
+        public Mago(string nome, int nivel, double vida) : base(nome, nivel, vida)
+        {
+        }
+        public override double Atacar()
+        {
+            double dano = ((Nivel * 5) * 3);
+            double passiva =  Nivel * 0.5;
+            Vida -= passiva;
+            Console.WriteLine($"{Nome} atacou e causou {dano} de dano");
+            Console.WriteLine($" ---- Passiva Mago ---- A vida do {Nome} foi reduzida a {Vida}");
+            return dano;
+        }
+        public override void Defender(double danoRecebido)
+        {
+            double danoFinal = (danoRecebido / 1.5) * Nivel;
+            Vida += danoFinal;
+            Console.WriteLine($"{Nome}, utiliza uma magia de proteção! Sua vida é {Vida:F2}");
+        }
+    }
+    
+}
+
+Arqueiro
+
+namespace AtividadeJogo_Jean
+{
+    internal class Arqueiro : Personagem
+    {
+        public Arqueiro(string nome, int nivel, double vida) : base(nome, nivel, vida)
+        {
+        }
+        public override double Atacar()
+        {
+            double dano = (Nivel * 4)+10;
+            Console.WriteLine($"{Nome} atacou e causou {dano} de dano");
+            return dano;
+        }
+        public override void Defender(double danoRecebido)
+        {
+            double danoFinal = (danoRecebido / 0.5) * Nivel;
+            Vida += danoFinal;
+            Console.WriteLine($"{Nome}, não possui muita armadura, logo leva mais dano! Sua vida é {Vida:F2}");
+        }
+    }
+}
+
+Totalizar dano 
+
+namespace AtividadeJogo_Jean
+{
+    internal class TotalizarDano
+    {
+        public double DanoTotal { get; set; }
+        public double DefesaTotal { get; set; }
+        public void RegistrarAtaque(Personagem personagem)
+        {
+            DanoTotal += personagem.Atacar();
+        }
+    }
+}
